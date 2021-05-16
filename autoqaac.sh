@@ -96,7 +96,6 @@ if [[ -d "$1" ]]; then
 # VARIABLES -----------------------------------------------------------------
 INPUT="$1"
 export WINEDEBUG=-all
-qaac_exe="wine '$HOME/.wine/drive_c/Program Files (x86)/qaac/qaac.exe'"
 music_dir="$HOME/Music/"
 size_old=$(du -b "$INPUT" | grep -Eo '^[0-9]+')
 bitrate=$(mediainfo --language=raw "$INPUT" | grep -m 1 '^BitRate/String' | \
@@ -143,8 +142,9 @@ elif ! [[ "${INPUT,,}" =~ ^.*\.(m(4[avpb]|p4)|wav) ]]; then
     INPUT="${INPUT%.*}.flac"
     fi
 final_bitrate=$((bitrate < desired_bitrate ? bitrate : desired_bitrate))
-$qaac_exe -v "$final_bitrate"k -q 2 --no-smart-padding --threading \
-    --text-codepage 65001 $artwork -o "$INPUT.m4a" "$INPUT"
+wine "$HOME/.wine/drive_c/Program Files (x86)/qaac/qaac.exe" -v \
+     "$final_bitrate"k -q 2 --no-smart-padding --threading \
+     --text-codepage 65001 $artwork -o "$INPUT.m4a" "$INPUT"
 if [[ $? -ne 0 ]]; then
     WHAT_TO_RETURN=$?
     if [[ "$FLACED" == true ]]; then rm -f "$INPUT" &> /dev/null; fi
