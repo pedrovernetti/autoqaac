@@ -96,7 +96,7 @@ if [[ -d "$1" ]]; then
 # VARIABLES -----------------------------------------------------------------
 INPUT="$1"
 export WINEDEBUG=-all
-qaac_exe="qaac"
+qaac_exe="wine '$HOME/.wine/drive_c/Program Files (x86)/qaac/qaac.exe'"
 music_dir="$HOME/Music/"
 size_old=$(du -b "$INPUT" | grep -Eo '^[0-9]+')
 bitrate=$(mediainfo --language=raw "$INPUT" | grep -m 1 '^BitRate/String' | \
